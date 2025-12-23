@@ -1,4 +1,11 @@
 {
+  "type": "module",
+  "scripts": {
+    "start": "node src/main.js"
+  }
+}
+
+{
   "name": "webpage-change-tracker-ai",
   "version": "1.0.0",
   "type": "module",
