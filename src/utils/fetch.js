@@ -1,5 +1,5 @@
 import axios from 'axios';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 
 export async function fetchPageText(url) {
     const response = await axios.get(url, { timeout: 20000 });
