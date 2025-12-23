@@ -1,9 +1,11 @@
-import { Actor, log } from 'apify';
+import { Actor, log, ProxyConfiguration } from 'apify';
 import { fetchPageContent } from './utils/fetch.js';
 import { calculateTextDiff, calculateHtmlDiff } from './utils/diff.js';
 import { runAI } from './ai/provider.js';
 
 await Actor.init();
+
+const proxyConfiguration = await Actor.createProxyConfiguration();
 
 const input = await Actor.getInput();
 const {
@@ -22,7 +24,7 @@ const store = await Actor.openKeyValueStore('page-snapshots');
 const previousSnapshot = await store.getValue('snapshot') || {};
 
 log.info(`Fetching webpage: ${url}`);
-const currentContent = await fetchPageContent(url);
+const currentContent = await fetchPageContent(url, proxyConfiguration);
 
 let changed = false;
 let changedSections = [];

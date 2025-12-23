@@ -1,9 +1,13 @@
-import axios from 'axios';
+import { gotScraping } from 'got-scraping';
 import * as cheerio from 'cheerio';
 
-export async function fetchPageContent(url) {
-    const response = await axios.get(url, { timeout: 20000 });
-    const html = response.data;
+export async function fetchPageContent(url, proxyConfiguration) {
+    const response = await gotScraping({
+        url,
+        proxyUrl: proxyConfiguration ? await proxyConfiguration.newUrl() : undefined,
+        timeout: { request: 20000 },
+    });
+    const html = response.body;
     const $ = cheerio.load(html);
 
     // Create a clean version of the HTML for text diffing
