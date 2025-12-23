@@ -1,4 +1,4 @@
-import { Actor } from 'apify';
+import { Actor, log } from 'apify';
 import { fetchPageText } from './utils/fetch.js';
 import { calculateDiff } from './utils/diff.js';
 import { runAI } from './ai/provider.js';
@@ -20,7 +20,7 @@ if (!url) {
 const store = await Actor.openKeyValueStore('page-snapshots');
 const previousSnapshot = await store.getValue('snapshot');
 
-Actor.log.info(`Fetching webpage: ${url}`);
+log.info(`Fetching webpage: ${url}`);
 const currentSnapshot = await fetchPageText(url);
 
 let output = {
@@ -62,5 +62,5 @@ ${JSON.stringify(changes, null, 2)}
 await store.setValue('snapshot', currentSnapshot);
 await Actor.pushData(output);
 
-Actor.log.info('Actor finished successfully.');
+log.info('Actor finished successfully.');
 await Actor.exit();
