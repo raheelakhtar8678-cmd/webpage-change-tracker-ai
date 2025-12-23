@@ -1,0 +1,31 @@
+{
+  "title": "Webpage Change Tracker + AI Summary",
+  "description": "Monitor any webpage and detect content changes with optional AI explanation",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "url": {
+      "title": "Webpage URL",
+      "type": "string",
+      "editor": "textfield",
+      "description": "URL to monitor for content changes"
+    },
+    "useAI": {
+      "title": "Enable AI summary",
+      "type": "boolean",
+      "default": false
+    },
+    "aiProvider": {
+      "title": "AI Provider",
+      "type": "string",
+      "enum": ["openai", "gemini", "openrouter"],
+      "default": "openai"
+    },
+    "apiKey": {
+      "title": "AI API Key (optional)",
+      "type": "string",
+      "editor": "password"
+    }
+  },
+  "required": ["url"]
+}
