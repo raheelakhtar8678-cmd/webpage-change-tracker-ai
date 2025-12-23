@@ -25,6 +25,13 @@
       "title": "AI API Key (optional)",
       "type": "string",
       "editor": "password"
+    },
+    "diffType": {
+      "title": "Diff Type",
+      "type": "string",
+      "enum": ["text", "html"],
+      "default": "text",
+      "description": "Choose 'text' for a clean, readable diff or 'html' for a raw, structural comparison."
     }
   },
   "required": ["url"]

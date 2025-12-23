@@ -1,6 +1,6 @@
 import { Actor, log } from 'apify';
-import { fetchPageText } from './utils/fetch.js';
-import { calculateDiff } from './utils/diff.js';
+import { fetchPageContent } from './utils/fetch.js';
+import { calculateTextDiff, calculateHtmlDiff } from './utils/diff.js';
 import { runAI } from './ai/provider.js';
 
 await Actor.init();
@@ -10,7 +10,8 @@ const {
     url,
     useAI = false,
     aiProvider = 'openai',
-    apiKey = ''
+    apiKey = '',
+    diffType = 'text',
 } = input || {};
 
 if (!url) {
@@ -18,28 +19,29 @@ if (!url) {
 }
 
 const store = await Actor.openKeyValueStore('page-snapshots');
-const previousSnapshot = await store.getValue('snapshot');
+const previousSnapshot = await store.getValue('snapshot') || {};
 
 log.info(`Fetching webpage: ${url}`);
-const currentSnapshot = await fetchPageText(url);
+const currentContent = await fetchPageContent(url);
 
-let output = {
-    url,
-    checkedAt: new Date().toISOString(),
-    changed: false,
-    changes: [],
-    aiSummary: null
-};
+let changed = false;
+let changedSections = [];
 
-if (previousSnapshot) {
-    const changes = calculateDiff(previousSnapshot, currentSnapshot);
+if (previousSnapshot.text) {
+    if (diffType === 'text') {
+        changedSections = calculateTextDiff(previousSnapshot.text, currentContent.text);
+    } else {
+        changedSections = calculateHtmlDiff(previousSnapshot.html, currentContent.html);
+    }
 
-    if (changes.length > 0) {
-        output.changed = true;
-        output.changes = changes;
+    if (changedSections.length > 0) {
+        changed = true;
+    }
+}
 
-        if (useAI && apiKey) {
-            const prompt = `
+let summary = null;
+if (changed && useAI && apiKey) {
+    const prompt = `
 A webpage has changed.
 
 Explain in simple language:
@@ -47,20 +49,24 @@ Explain in simple language:
 2) Why it might matter to a user
 
 Changes:
-${JSON.stringify(changes, null, 2)}
-            `;
+${JSON.stringify(changedSections, null, 2)}
+    `;
 
-            output.aiSummary = await runAI({
-                provider: aiProvider,
-                apiKey,
-                prompt
-            });
-        }
-    }
+    summary = await runAI({
+        provider: aiProvider,
+        apiKey,
+        prompt,
+    });
 }
 
-await store.setValue('snapshot', currentSnapshot);
-await Actor.pushData(output);
+await store.setValue('snapshot', currentContent);
+
+await Actor.pushData({
+    changed,
+    changedSections,
+    summary,
+    timestamp: new Date().toISOString(),
+});
 
 log.info('Actor finished successfully.');
 await Actor.exit();
