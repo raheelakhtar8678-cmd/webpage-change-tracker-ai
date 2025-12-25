@@ -12,7 +12,7 @@ const {
     url,
     useAI = false,
     aiProvider = 'openai',
-    openRouterModel = 'qwen/qwen-3-coder-480b-a35b',
+    model, // Unified model input
     apiKey = '',
     diffType = 'text',
 } = input || {};
@@ -31,10 +31,6 @@ let changed = false;
 let changedSections = [];
 
 if (previousSnapshot.text) {
-    // Save the text being compared for debugging purposes
-    await store.setValue('DEBUG_PREVIOUS_TEXT', previousSnapshot.text);
-    await store.setValue('DEBUG_CURRENT_TEXT', currentContent.text);
-
     if (diffType === 'text') {
         changedSections = calculateTextDiff(previousSnapshot.text, currentContent.text);
     } else {
@@ -62,7 +58,7 @@ ${JSON.stringify(changedSections, null, 2)}
     summary = await runAI({
         provider: aiProvider,
         apiKey,
-        model: openRouterModel,
+        model, // Pass the unified model to the AI provider
         prompt,
     });
 }
