@@ -37,7 +37,7 @@ async function queryOpenAI(apiKey, prompt) {
 
 async function queryGemini(apiKey, prompt) {
     const response = await gotScraping({
-        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
+        url: `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`,
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         json: { contents: [{ parts: [{ text: prompt }] }] },
