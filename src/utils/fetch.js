@@ -1,8 +1,8 @@
 import { gotScraping } from 'got-scraping';
 import * as cheerio from 'cheerio';
 
-// A set of block-level HTML tags.
-const BLOCK_TAGS = new Set(['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'li', 'ul', 'ol', 'tr', 'td', 'th', 'br', 'hr', 'article', 'section', 'header', 'footer', 'nav', 'aside']);
+// A set of block-level HTML tags that should have a space after them.
+const BLOCK_TAGS = new Set(['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'li', 'ul', 'ol', 'tr', 'td', 'th', 'br', 'hr', 'article', 'section']);
 
 /**
  * Recursively traverses the DOM and extracts text, adding spaces between block-level elements.
@@ -13,14 +13,18 @@ const BLOCK_TAGS = new Set(['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'li'
 function getTextWithSpacing(node, $) {
     let text = '';
     if (node.type === 'text') {
-        text += $(node).text();
+        // Add the text content, and ensure it has a space at the end if it's not just whitespace.
+        const nodeText = $(node).text();
+        if (nodeText.trim().length > 0) {
+            text += nodeText + ' ';
+        }
     } else if (node.type === 'tag') {
-        // Recursively get text from child nodes
+        // Recursively get text from child nodes.
         $(node).contents().each((_, child) => {
             text += getTextWithSpacing(child, $);
         });
 
-        // Add a space after block-level elements to ensure separation
+        // Add a space after block-level elements to ensure separation.
         if (BLOCK_TAGS.has(node.name)) {
             text += ' ';
         }
@@ -37,13 +41,13 @@ export async function fetchPageContent(url, proxyConfiguration) {
     const html = response.body;
     const $ = cheerio.load(html);
 
-    // Remove scripts, styles, and other non-visible elements
-    $('script, style, noscript, svg, header, footer, nav').remove();
+    // Remove scripts, styles, and other non-visible elements that clutter the text.
+    $('script, style, noscript, svg, header, footer, nav, aside, form, [role="navigation"], [role="search"]').remove();
 
-    // Extract text with intelligent spacing
+    // Extract text with intelligent spacing from the body.
     let extractedText = getTextWithSpacing($('body')[0], $);
 
-    // Normalize whitespace to a single space
+    // Normalize whitespace to a single space to clean up the final output.
     extractedText = extractedText.replace(/\s+/g, ' ').trim();
 
     return {
