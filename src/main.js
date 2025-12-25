@@ -31,6 +31,10 @@ let changed = false;
 let changedSections = [];
 
 if (previousSnapshot.text) {
+    // Save the text being compared for debugging purposes
+    await store.setValue('DEBUG_PREVIOUS_TEXT', previousSnapshot.text);
+    await store.setValue('DEBUG_CURRENT_TEXT', currentContent.text);
+
     if (diffType === 'text') {
         changedSections = calculateTextDiff(previousSnapshot.text, currentContent.text);
     } else {
