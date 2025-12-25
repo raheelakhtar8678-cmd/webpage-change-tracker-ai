@@ -23,21 +23,21 @@ function handleOpenAIStyleResponse(response, providerName) {
     return body.choices[0].message.content;
 }
 
-async function queryOpenAI(apiKey, prompt) {
+async function queryOpenAI(apiKey, model, prompt) {
     const response = await gotScraping({
         url: 'https://api.openai.com/v1/chat/completions',
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-        json: { model: 'gpt-4o', messages: [{ role: 'user', content: prompt }] },
+        json: { model: model || 'gpt-4o', messages: [{ role: 'user', content: prompt }] },
         responseType: 'json',
         throwHttpErrors: false, // Handle HTTP errors manually for better error messages.
     });
     return handleOpenAIStyleResponse(response, 'OpenAI');
 }
 
-async function queryGemini(apiKey, prompt) {
+async function queryGoogle(apiKey, model, prompt) {
     const response = await gotScraping({
-        url: `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`,
+        url: `https://generativelanguage.googleapis.com/v1/models/${model || 'gemini-2.5-pro'}:generateContent?key=${apiKey}`,
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         json: { contents: [{ parts: [{ text: prompt }] }] },
@@ -49,11 +49,11 @@ async function queryGemini(apiKey, prompt) {
 
     if (statusCode !== 200 || body.error) {
         const errorMessage = body.error ? body.error.message : `Received HTTP status ${statusCode}`;
-        throw new Error(`Gemini API Error: ${errorMessage}`);
+        throw new Error(`Google API Error: ${errorMessage}`);
     }
 
     if (!body.candidates || body.candidates.length === 0 || !body.candidates[0].content) {
-        throw new Error('Gemini API Error: Received an empty or invalid response structure.');
+        throw new Error('Google API Error: Received an empty or invalid response structure.');
     }
 
     return body.candidates[0].content.parts[0].text;
@@ -64,7 +64,7 @@ async function queryOpenRouter(apiKey, model, prompt) {
         url: 'https://openrouter.ai/api/v1/chat/completions',
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-        json: { model, messages: [{ role: 'user', content: prompt }] },
+        json: { model: model || 'qwen/qwen-3-coder-480b-a35b', messages: [{ role: 'user', content: prompt }] },
         responseType: 'json',
         throwHttpErrors: false,
     });
@@ -76,9 +76,9 @@ export async function runAI({ provider, apiKey, model, prompt }) {
     try {
         switch (provider) {
             case 'openai':
-                return await queryOpenAI(apiKey, prompt);
-            case 'gemini':
-                return await queryGemini(apiKey, prompt);
+                return await queryOpenAI(apiKey, model, prompt);
+            case 'google':
+                return await queryGoogle(apiKey, model, prompt);
             case 'openrouter':
                 return await queryOpenRouter(apiKey, model, prompt);
             default:
