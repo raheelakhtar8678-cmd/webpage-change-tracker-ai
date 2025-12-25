@@ -19,12 +19,20 @@
       "title": "AI Provider",
       "type": "string",
       "enum": ["openai", "gemini", "openrouter"],
-      "default": "openai"
+      "default": "openai",
+      "description": "Choose your preferred AI provider. For OpenRouter, you can specify a model below."
+    },
+    "openRouterModel": {
+      "title": "OpenRouter Model (optional)",
+      "type": "string",
+      "default": "qwen/qwen-3-coder-480b-a35b",
+      "description": "Specify the OpenRouter model to use (e.g., 'google/gemini-1.5-flash-lite')."
     },
     "apiKey": {
-      "title": "AI API Key (optional)",
+      "title": "AI API Key",
       "type": "string",
-      "editor": "password"
+      "editor": "password",
+      "description": "Your API key for the selected AI provider."
     },
     "diffType": {
       "title": "Diff Type",

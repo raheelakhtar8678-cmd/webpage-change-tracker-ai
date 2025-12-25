@@ -12,6 +12,7 @@ const {
     url,
     useAI = false,
     aiProvider = 'openai',
+    openRouterModel = 'qwen/qwen-3-coder-480b-a35b',
     apiKey = '',
     diffType = 'text',
 } = input || {};
@@ -57,6 +58,7 @@ ${JSON.stringify(changedSections, null, 2)}
     summary = await runAI({
         provider: aiProvider,
         apiKey,
+        model: openRouterModel,
         prompt,
     });
 }
