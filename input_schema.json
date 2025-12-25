@@ -33,7 +33,7 @@
     "apiKey": {
       "title": "AI API Key (requires AI summary to be enabled)",
       "type": "string",
-      "editor": "password",
+      "editor": "textfield",
       "description": "Your API key for the selected AI provider."
     },
     "openRouterModel": {
