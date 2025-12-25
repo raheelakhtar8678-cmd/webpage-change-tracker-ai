@@ -1,60 +1,78 @@
 {
-  "title": "Webpage Change Tracker + AI Summary",
-  "description": "Monitor any webpage and detect content changes with optional AI explanation",
-  "type": "object",
-  "schemaVersion": 1,
-  "properties": {
-    "url": {
-      "title": "Webpage URL",
-      "type": "string",
-      "editor": "textfield",
-      "description": "URL to monitor for content changes"
+    "title": "Webpage Change Tracker + AI Summary",
+    "description": "Monitor any webpage and detect content changes with optional AI explanation",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "url": {
+            "title": "Webpage URL",
+            "type": "string",
+            "editor": "textfield",
+            "description": "URL to monitor for content changes"
+        },
+        "diffType": {
+            "title": "Diff Type",
+            "type": "string",
+            "enum": [
+                "text",
+                "html"
+            ],
+            "default": "text",
+            "description": "Choose 'text' for a clean, readable diff or 'html' for a raw, structural comparison."
+        },
+        "useAI": {
+            "title": "Enable AI summary",
+            "type": "boolean",
+            "default": false
+        },
+        "aiProvider": {
+            "title": "AI Provider",
+            "type": "string",
+            "enum": [
+                "openai",
+                "gemini",
+                "openrouter"
+            ],
+            "default": "openai",
+            "description": "Choose your preferred AI provider. For OpenRouter, you can specify a model below."
+        },
+        "apiKey": {
+            "title": "AI API Key",
+            "type": "string",
+            "editor": "password",
+            "description": "Your API key for the selected AI provider."
+        },
+        "openRouterModel": {
+            "title": "OpenRouter Model (optional)",
+            "type": "string",
+            "default": "qwen/qwen-3-coder-480b-a35b",
+            "description": "Specify the OpenRouter model to use (e.g., 'google/gemini-1.5-flash-lite')."
+        }
     },
-    "diffType": {
-      "title": "Diff Type",
-      "type": "string",
-      "enum": ["text", "html"],
-      "default": "text",
-      "description": "Choose 'text' for a clean, readable diff or 'html' for a raw, structural comparison."
-    },
-    "useAI": {
-      "title": "Enable AI summary",
-      "type": "boolean",
-      "default": false
-    },
-    "aiProvider": {
-      "title": "AI Provider",
-      "type": "string",
-      "enum": ["openai", "gemini", "openrouter"],
-      "default": "openai",
-      "description": "Choose your preferred AI provider. For OpenRouter, you can specify a model below.",
-      "prefill": "openai"
-    },
-    "apiKey": {
-      "title": "AI API Key",
-      "type": "string",
-      "editor": "password",
-      "description": "Your API key for the selected AI provider."
-    },
-    "openRouterModel": {
-      "title": "OpenRouter Model (optional)",
-      "type": "string",
-      "default": "qwen/qwen-3-coder-480b-a35b",
-      "description": "Specify the OpenRouter model to use (e.g., 'google/gemini-1.5-flash-lite')."
+    "required": [
+        "url"
+    ],
+    "ui": {
+        "aiProvider": {
+            "ui:visible": "useAI"
+        },
+        "apiKey": {
+            "ui:visible": "useAI"
+        },
+        "openRouterModel": {
+            "ui:visible": {
+                "and": [
+                    "useAI",
+                    {
+                        "===": [
+                            {
+                                "var": "aiProvider"
+                            },
+                            "openrouter"
+                        ]
+                    }
+                ]
+            }
+        }
     }
-  },
-  "required": ["url"],
-  "ui": {
-    "aiProvider": {
-      "ui:visible": "useAI"
-    },
-    "apiKey": {
-      "ui:visible": "useAI"
-    },
-    "openRouterModel": {
-      "ui:visible": {
-        "and": ["useAI", {"===": [{"var": "aiProvider"}, "openrouter"]}]
-      }
-    }
-  }
 }
