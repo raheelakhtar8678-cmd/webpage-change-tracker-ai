@@ -1,4 +1,4 @@
-import { diffChars } from 'diff';
+import { diffWords } from 'diff';
 import { htmlDiff } from '@benedicte/html-diff';
 import * as cheerio from 'cheerio';
 
@@ -6,7 +6,7 @@ import * as cheerio from 'cheerio';
  * Calculates the difference between two text strings.
  */
 export function calculateTextDiff(before, after) {
-    const changes = diffChars(before, after);
+    const changes = diffWords(before, after);
     const formattedChanges = changes.map(part => ({
         type: part.added ? 'addition' : part.removed ? 'deletion' : 'no-change',
         value: part.value,
