@@ -23,24 +23,37 @@ function handleOpenAIStyleResponse(response, providerName) {
     return body.choices[0].message.content;
 }
 
-async function queryOpenAI(apiKey, model, prompt) {
+async function queryOpenAI(apiKey, model, prompt, summaryLength) {
+    const maxTokens = Math.ceil(summaryLength * 1.5);
+
     const response = await gotScraping({
         url: 'https://api.openai.com/v1/chat/completions',
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-        json: { model: model || 'gpt-4o', messages: [{ role: 'user', content: prompt }] },
+        json: {
+            model: model || 'gpt-4o',
+            messages: [{ role: 'user', content: prompt }],
+            max_tokens: maxTokens,
+        },
         responseType: 'json',
         throwHttpErrors: false, // Handle HTTP errors manually for better error messages.
     });
     return handleOpenAIStyleResponse(response, 'OpenAI');
 }
 
-async function queryGoogle(apiKey, model, prompt) {
+async function queryGoogle(apiKey, model, prompt, summaryLength) {
+    const maxOutputTokens = Math.ceil(summaryLength * 1.5);
+
     const response = await gotScraping({
-        url: `https://generativelanguage.googleapis.com/v1/models/${model || 'gemini-2.5-pro'}:generateContent?key=${apiKey}`,
+        url: `https://generativelanguage.googleapis.com/v1/models/${model || 'gemini-1.5-pro-latest'}:generateContent?key=${apiKey}`,
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        json: { contents: [{ parts: [{ text: prompt }] }] },
+        json: {
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: {
+                maxOutputTokens,
+            },
+        },
         responseType: 'json',
         throwHttpErrors: false,
     });
@@ -59,28 +72,34 @@ async function queryGoogle(apiKey, model, prompt) {
     return body.candidates[0].content.parts[0].text;
 }
 
-async function queryOpenRouter(apiKey, model, prompt) {
+async function queryOpenRouter(apiKey, model, prompt, summaryLength) {
+    const maxTokens = Math.ceil(summaryLength * 1.5);
+
     const response = await gotScraping({
         url: 'https://openrouter.ai/api/v1/chat/completions',
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-        json: { model: model || 'qwen/qwen-3-coder-480b-a35b', messages: [{ role: 'user', content: prompt }] },
+        json: {
+            model: model || 'google/gemini-pro',
+            messages: [{ role: 'user', content: prompt }],
+            max_tokens: maxTokens,
+        },
         responseType: 'json',
         throwHttpErrors: false,
     });
     return handleOpenAIStyleResponse(response, 'OpenRouter');
 }
 
-export async function runAI({ provider, apiKey, model, prompt }) {
+export async function runAI({ provider, apiKey, model, prompt, summaryLength }) {
     // Wrap the entire execution in a try-catch to handle network/parsing errors from gotScraping.
     try {
         switch (provider) {
             case 'openai':
-                return await queryOpenAI(apiKey, model, prompt);
+                return await queryOpenAI(apiKey, model, prompt, summaryLength);
             case 'google':
-                return await queryGoogle(apiKey, model, prompt);
+                return await queryGoogle(apiKey, model, prompt, summaryLength);
             case 'openrouter':
-                return await queryOpenRouter(apiKey, model, prompt);
+                return await queryOpenRouter(apiKey, model, prompt, summaryLength);
             default:
                 throw new Error(`Unsupported AI provider: ${provider}`);
         }

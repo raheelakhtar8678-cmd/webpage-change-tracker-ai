@@ -15,6 +15,7 @@ const {
     model, // Unified model input
     apiKey = '',
     diffType = 'text',
+    summaryLength = 100,
 } = input || {};
 
 if (!url) {
@@ -51,6 +52,8 @@ Explain in simple language:
 1) What changed
 2) Why it might matter to a user
 
+The summary should be no more than ${summaryLength} words.
+
 Changes:
 ${JSON.stringify(changedSections, null, 2)}
     `;
@@ -60,6 +63,7 @@ ${JSON.stringify(changedSections, null, 2)}
         apiKey,
         model, // Pass the unified model to the AI provider
         prompt,
+        summaryLength,
     });
 }
 
