@@ -22,7 +22,7 @@ if (!url) {
     throw new Error('Input "url" is required.');
 }
 
-const store = await Actor.openKeyValueStore('PAGE_SNAPSHOTS');
+const store = await Actor.openKeyValueStore('page-snapshots');
 const previousSnapshot = await store.getValue('snapshot_text');
 const previousScreenshotBuffer = await store.getValue('snapshot_image');
 
