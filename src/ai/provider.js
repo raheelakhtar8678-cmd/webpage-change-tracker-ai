@@ -29,9 +29,15 @@ export async function runAI({ provider, apiKey, model, prompt }) {
             const cleanModel = modelName.includes('/') ? modelName.split('/')[1] : modelName;
 
             const res = await axios.post(
-                `https://generativelanguage.googleapis.com/v1beta/models/${cleanModel}:generateContent?key=${apiKey}`,
+                `https://generativelanguage.googleapis.com/v1beta/models/${cleanModel}:generateContent`,
                 {
                     contents: [{ parts: [{ text: prompt }] }]
+                },
+                {
+                    headers: {
+                        'x-goog-api-key': apiKey,
+                        'Content-Type': 'application/json'
+                    }
                 }
             );
             return res.data.candidates[0].content.parts[0].text;
