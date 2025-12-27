@@ -1,0 +1,12 @@
+Info: All default local stores were purged.
+Warning: You are not logged in with your Apify Account. Some features like Apify Proxy will not work. Call "apify login" to fix that.
+Run: npm run start
+
+> webpage-change-tracker-ai@1.0.0 start
+> node src/main.js
+
+[32mINFO[39m  System info[90m {"apifyVersion":"3.5.2","apifyClientVersion":"2.21.0","crawleeVersion":"3.15.3","osType":"Linux","nodeVersion":"v22.21.1"}[39m
+[33mWARN[39m [33m ProxyConfiguration:[39m No proxy password or token detected, running without proxy. To use Apify Proxy locally, provide options.password or "APIFY_PROXY_PASSWORD" environment variable. You can also provide your Apify token via the "APIFY_TOKEN" environment variable, so that the SDK can fetch the proxy password from Apify API, when APIFY_PROXY_PASSWORD is not defined
+[33mWARN[39m [33m ProxyConfiguration:[39m Invalid password provided: User not found.
+[32mINFO[39m  Fetching webpage: https://www.apify.com
+[32mINFO[39m  Actor finished successfully.

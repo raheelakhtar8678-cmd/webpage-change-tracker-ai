@@ -1,0 +1,15 @@
+
+> webpage-change-tracker-ai@1.0.0 start
+> node src/main.js
+
+[32mINFO[39m  System info[90m {"apifyVersion":"3.5.2","apifyClientVersion":"2.21.0","crawleeVersion":"3.15.3","osType":"Linux","nodeVersion":"v22.21.1"}[39m
+[33mWARN[39m [33m ProxyConfiguration:[39m No proxy password or token detected, running without proxy. To use Apify Proxy locally, provide options.password or "APIFY_PROXY_PASSWORD" environment variable. You can also provide your Apify token via the "APIFY_TOKEN" environment variable, so that the SDK can fetch the proxy password from Apify API, when APIFY_PROXY_PASSWORD is not defined
+[33mWARN[39m [33m ProxyConfiguration:[39m Invalid password provided: User not found.
+file:///app/src/main.js:22
+    throw new Error('Input "url" is required.');
+          ^
+
+Error: Input "url" is required.
+    at file:///app/src/main.js:22:11
+
+Node.js v22.21.1
