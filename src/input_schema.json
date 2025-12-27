@@ -43,11 +43,27 @@
       "editor": "hidden",
       "description": "Your API key for the selected AI provider."
     },
-    "model": {
-      "title": "AI Model (optional)",
+    "modelPreset": {
+      "title": "AI Model Preset",
+      "type": "string",
+      "editor": "select",
+      "default": "gemini-2.0-flash-lite-preview-02-05",
+      "enum": [
+        "gemini-2.0-flash-lite-preview-02-05",
+        "gemini-1.5-flash",
+        "gemini-1.5-pro",
+        "gpt-4o",
+        "gpt-4o-mini",
+        "CUSTOM"
+      ],
+      "description": "Select a popular model or choose 'CUSTOM' to enter your own below."
+    },
+    "customModel": {
+      "title": "Custom Model ID",
       "type": "string",
       "editor": "textfield",
-      "description": "Specify the model to use. Default is 'gemini-2.0-flash-lite-preview-02-05'. You can enter any valid model ID here (e.g. 'gpt-4o', 'gemini-1.5-pro')."
+      "prefill": "gemini-2.0-flash-lite-preview-02-05",
+      "description": "Enter your specific model ID here if you selected 'CUSTOM' above (e.g. 'google/gemini-2.0-pro-exp-02-05')."
     },
     "summaryLength": {
       "title": "Summary Length (in words)",

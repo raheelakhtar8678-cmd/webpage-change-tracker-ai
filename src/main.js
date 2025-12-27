@@ -15,12 +15,27 @@ const {
     useAI = false,
     aiProvider = 'openai',
     apiKey = '',
-    model: inputModel = '',
+    // New fields from schema update
+    modelPreset = 'gemini-2.0-flash-lite-preview-02-05',
+    customModel = '',
+    // Legacy support
+    model: legacyModel = '',
     openRouterModel = ''
 } = input || {};
 
-// Support alternate input keys (e.g. from JSON editor or legacy inputs)
-const model = inputModel || openRouterModel;
+// Determine the final model to use:
+// 1. If preset is 'CUSTOM', use the customModel field.
+// 2. If preset is NOT 'CUSTOM', use the preset value.
+// 3. Fallback to legacy inputs if new ones aren't helpful (e.g. running via API with old payload).
+let model = '';
+if (modelPreset === 'CUSTOM' && customModel) {
+    model = customModel;
+} else if (modelPreset && modelPreset !== 'CUSTOM') {
+    model = modelPreset;
+} else {
+    // Fallback logic
+    model = legacyModel || openRouterModel || customModel || 'gemini-2.0-flash-lite-preview-02-05';
+}
 
 if (!url) {
     throw new Error('Input "url" is required.');
