@@ -103,6 +103,9 @@ Keep it concise and friendly.
         model,
         prompt
     });
+} else if (output.changed) {
+    if (!useAI) log.warning('AI summary skipped: "useAI" input is false.');
+    if (!apiKey) log.warning('AI summary skipped: "apiKey" input is missing.');
 }
 
 // Generate HTML Report
