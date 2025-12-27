@@ -24,7 +24,8 @@ export async function runAI({ provider, apiKey, model, prompt }) {
 
         if (provider === 'gemini' || provider === 'google') {
             // Google uses the model in the URL path: models/gemini-2.0-flash-lite-preview-02-05:generateContent
-            const modelName = model || 'gemini-2.0-flash-lite-preview-02-05';
+            let modelName = model || 'gemini-2.0-flash-lite-preview-02-05';
+            modelName = modelName.trim().replace(/\s+/g, '-'); // Fix "gemini 2.5 flash lite" -> "gemini-2.5-flash-lite"
             // Simple mapping if user provides short names, else assume correct format or fix typical variants
             const cleanModel = modelName.includes('/') ? modelName.split('/')[1] : modelName;
 
