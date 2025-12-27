@@ -12,7 +12,7 @@ COPY package*.json ./
 RUN npm --quiet set progress=false \
     && npm ci --omit=dev --omit=optional \
     && echo "Installed NPM packages" \
-    && npx playwright install chromium --with-deps
+    && npx playwright install chromium
 
 # Copy the rest of the source code to the image.
 COPY . ./
