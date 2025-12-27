@@ -23,8 +23,8 @@ export async function runAI({ provider, apiKey, model, prompt }) {
         }
 
         if (provider === 'gemini' || provider === 'google') {
-            // Google uses the model in the URL path: models/gemini-1.5-pro:generateContent
-            const modelName = model || 'gemini-1.5-pro';
+            // Google uses the model in the URL path: models/gemini-1.5-flash:generateContent
+            const modelName = model || 'gemini-1.5-flash';
             // Simple mapping if user provides short names, else assume correct format or fix typical variants
             const cleanModel = modelName.includes('/') ? modelName.split('/')[1] : modelName;
 
