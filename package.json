@@ -4,8 +4,7 @@
   "type": "module",
   "description": "Monitor webpage changes with optional AI summary",
   "scripts": {
-    "start": "node src/main.js",
-    "postinstall": "npx playwright install chromium"
+    "start": "node src/main.js"
   },
   "dependencies": {
     "@benedicte/html-diff": "^0.1.0",
