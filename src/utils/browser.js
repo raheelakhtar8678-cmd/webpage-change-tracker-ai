@@ -21,7 +21,7 @@ export async function captureScreenshot(url) {
 
         // Take a screenshot of the full page or just the visible area?
         // Full page is better for change detection.
-        const buffer = await page.screenshot({ fullPage: true, type: 'png' });
+        const buffer = await page.screenshot({ fullPage: true, type: 'png', timeout: 60000 });
 
         return buffer;
     } catch (error) {
