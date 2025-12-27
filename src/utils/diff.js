@@ -14,6 +14,8 @@ export function calculateTextDiff(before, after) {
     return formattedChanges.filter(c => c.type !== 'no-change');
 }
 
+export const calculateDiff = calculateTextDiff;
+
 /**
  * Calculates the difference between two HTML strings and returns a structured format.
  */
