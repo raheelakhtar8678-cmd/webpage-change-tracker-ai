@@ -11,7 +11,10 @@ export async function captureScreenshot(url) {
         });
         const page = await context.newPage();
 
-        await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
+        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+
+        // Wait for a few seconds for dynamic content/animations to settle
+        await page.waitForTimeout(2000);
 
         // Wait specifically for body to ensure content is painted
         await page.waitForSelector('body');
