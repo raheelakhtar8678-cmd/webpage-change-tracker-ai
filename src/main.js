@@ -40,7 +40,8 @@ let output = {
     changed: false,
     changes: [],
     aiSummary: null,
-    visualChangePercent: 0
+    visualChangePercent: 0,
+    status: null // 'INITIAL_RUN', 'CHANGED', 'NO_CHANGE'
 };
 
 let diffImageBase64 = null;
@@ -53,7 +54,13 @@ if (previousSnapshot) {
     if (changes.length > 0) {
         output.changed = true;
         output.changes = changes;
+        output.status = 'CHANGED';
+    } else {
+        output.status = 'NO_CHANGE';
     }
+} else {
+    log.info('No previous snapshot found. Saving baseline.');
+    output.status = 'INITIAL_RUN';
 }
 
 // Visual Comparison
@@ -108,6 +115,8 @@ htmlReport = htmlReport
     .replace('{{#if changed}}', output.changed ? '' : '<!--')
     .replace('{{else}}', output.changed ? '<!--' : '')
     .replace('{{/if}}', '-->')
+    .replace('{{#if firstRun}}', output.status === 'INITIAL_RUN' ? '' : '<!--')
+    .replace('{{/if firstRun}}', '-->')
     .replace('{{aiSummary}}', output.aiSummary || 'No AI summary generated.')
     .replace('{{diffImage}}', diffImageBase64 || '')
     .replace('{{textDiff}}', JSON.stringify(changes, null, 2));
@@ -116,11 +125,14 @@ htmlReport = htmlReport
 // In a real app, use Handlebars.compile. Here we just simple replace.
 // Adjusting the comments hack for "else" block:
 if (output.changed) {
-    htmlReport = htmlReport.replace('<!--', '').replace('-->', ''); // Unhide content
-    // Hide "No Changes" part
-    // This simple replace is brittle, but sufficient for this MVP. 
-    // Ideally we strictly slice the string. 
-    // Re-doing simple conditional logic properly:
+    htmlReport = htmlReport.replace('<!--', '').replace('-->', '');
+}
+if (output.status === 'INITIAL_RUN') {
+    // Unhide firstRun block if it exists (simulating handlebars)
+    // Note: The simple regex approach above strictly works for 1 block. 
+    // For multiple blocks, we need a better replacer or just use the populated string at the end.
+    // Since we are moving to the "Better simple template engine approach" below, 
+    // let's rely on that instead of this brittle block.
 }
 
 // Better simple template engine approach
