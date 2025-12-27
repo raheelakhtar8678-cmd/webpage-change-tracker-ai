@@ -15,8 +15,12 @@ const {
     useAI = false,
     aiProvider = 'openai',
     apiKey = '',
-    model = ''
+    model: inputModel = '',
+    openRouterModel = ''
 } = input || {};
+
+// Support alternate input keys (e.g. from JSON editor or legacy inputs)
+const model = inputModel || openRouterModel;
 
 if (!url) {
     throw new Error('Input "url" is required.');
