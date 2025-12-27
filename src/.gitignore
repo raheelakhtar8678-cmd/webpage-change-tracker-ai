@@ -1,6 +1,5 @@
 node_modules
 .apify
 storage
-apify_storage
 .env
-*.log
+cd

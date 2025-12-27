@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webpage Change Report</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #38bdf8;
+            --success: #4ade80;
+            --warning: #facc15;
+            --danger: #f87171;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #334155;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, var(--accent), #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .meta {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #334155;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: var(--accent);
+            border-bottom: 1px solid #334155;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .ai-summary-content {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .diff-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            border: 1px solid #334155;
+        }
+
+        .diff-image {
+            width: 100%;
+            display: block;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .badge-change { background: rgba(248, 113, 113, 0.2); color: var(--danger); }
+        .badge-no-change { background: rgba(74, 222, 128, 0.2); color: var(--success); }
+
+        .text-diff pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Webpage Change Report</h1>
+            <div class="meta">
+                <p>Checked URL: <a href="{{url}}" style="color: var(--accent);">{{url}}</a></p>
+                <p>Time: {{time}}</p>
+            </div>
+        </header>
+
+        {{#if changed}}
+        <div class="grid">
+            <div class="card" style="grid-column: 1 / -1;">
+                <h2>AI Analysis</h2>
+                <div class="ai-summary-content">
+                    {{aiSummary}}
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Visual Diff</h2>
+                <div class="diff-container">
+                    <img src="{{diffImage}}" alt="Visual Difference" class="diff-image">
+                </div>
+                <p style="text-align: center; margin-top: 1rem; color: var(--text-secondary);">
+                    Red pixels indicate changes.
+                </p>
+            </div>
+
+            <div class="card">
+                <h2>Text Changes</h2>
+                <div class="text-diff">
+                    <pre>{{textDiff}}</pre>
+                </div>
+            </div>
+        </div>
+        {{else}}
+        <div class="card" style="text-align: center; padding: 3rem;">
+            <h2 style="border: none; color: var(--success);">No Changes Detected</h2>
+            <p>The webpage content matches the previous snapshot.</p>
+        </div>
+        {{/if}}
+    </div>
+</body>
+</html>

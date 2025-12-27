@@ -1,0 +1,53 @@
+{
+  "title": "Webpage Change Tracker + AI Summary",
+  "description": "Monitor any webpage and detect content changes with optional AI explanation",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "url": {
+      "title": "Webpage URL",
+      "type": "string",
+      "editor": "textfield",
+      "description": "The URL of the webpage you want to monitor."
+    },
+    "diffType": {
+      "title": "Diff Type",
+      "type": "string",
+      "enum": ["text", "html"],
+      "default": "text",
+      "description": "Choose 'text' for a clean, readable diff or 'html' for a raw, structural comparison."
+    },
+    "useAI": {
+      "title": "Enable AI summary",
+      "type": "boolean",
+      "default": false,
+      "description": "Toggle this on to enable the AI-powered summary of changes."
+    },
+    "aiProvider": {
+      "title": "AI Provider (requires AI summary to be enabled)",
+      "type": "string",
+      "enum": ["openai", "google", "openrouter"],
+      "default": "openai",
+      "description": "Choose your preferred AI provider."
+    },
+    "apiKey": {
+      "title": "AI API Key (requires AI summary to be enabled)",
+      "type": "string",
+      "editor": "hidden",
+      "description": "Your API key for the selected AI provider."
+    },
+    "model": {
+      "title": "AI Model (optional)",
+      "type": "string",
+      "editor": "textfield",
+      "description": "Specify the model to use. Examples: For OpenAI, 'gpt-4o'; for Google, 'gemini-1.5-pro-latest'; for OpenRouter, 'google/gemini-pro'."
+    },
+    "summaryLength": {
+      "title": "Summary Length (in words)",
+      "type": "integer",
+      "default": 100,
+      "description": "The maximum number of words for the AI-generated summary."
+    }
+  },
+  "required": ["url"]
+}
