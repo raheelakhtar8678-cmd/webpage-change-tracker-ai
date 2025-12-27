@@ -22,12 +22,12 @@ export async function runAI({ provider, apiKey, model, prompt }) {
             return res.data.choices[0].message.content;
         }
 
-        if (provider === 'gemini') {
+        if (provider === 'gemini' || provider === 'google') {
             // Google uses the model in the URL path: models/gemini-1.5-pro:generateContent
             const modelName = model || 'gemini-1.5-pro';
             // Simple mapping if user provides short names, else assume correct format or fix typical variants
             const cleanModel = modelName.includes('/') ? modelName.split('/')[1] : modelName;
-            
+
             const res = await axios.post(
                 `https://generativelanguage.googleapis.com/v1beta/models/${cleanModel}:generateContent?key=${apiKey}`,
                 {
