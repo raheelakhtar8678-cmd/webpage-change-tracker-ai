@@ -7,7 +7,7 @@
             "title": "Visual Analysis Report",
             "type": "string",
             "description": "Premium visual dashboard showing text and image diffs.",
-            "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/report.html"
+            "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/report.html?disableRedirect=true"
         },
         "results": {
             "title": "Dataset Results",
