@@ -37,11 +37,29 @@
       "default": "openai",
       "description": "Choose your preferred AI provider."
     },
-    "apiKey": {
-      "title": "AI API Key (requires AI summary to be enabled)",
+    "openaiApiKey": {
+      "title": "OpenAI API Key",
       "type": "string",
       "editor": "hidden",
-      "description": "Your API key for the selected AI provider."
+      "description": "API Key for OpenAI."
+    },
+    "googleApiKey": {
+      "title": "Google Gemini API Key",
+      "type": "string",
+      "editor": "hidden",
+      "description": "API Key for Google Gemini."
+    },
+    "openRouterApiKey": {
+      "title": "OpenRouter API Key",
+      "type": "string",
+      "editor": "hidden",
+      "description": "API Key for OpenRouter."
+    },
+    "apiKey": {
+      "title": "Fallback API Key (Legacy)",
+      "type": "string",
+      "editor": "hidden",
+      "description": "Fallback key if specific provider key is not set."
     },
     "modelPreset": {
       "title": "AI Model Preset",

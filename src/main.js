@@ -14,6 +14,11 @@ const {
     url,
     useAI = false,
     aiProvider = 'openai',
+    // New specific key fields
+    openaiApiKey = '',
+    googleApiKey = '',
+    openRouterApiKey = '',
+    // Legacy fallback
     apiKey = '',
     // New fields from schema update
     modelPreset = 'gemini-2.0-flash-lite-preview-02-05',
@@ -22,6 +27,13 @@ const {
     model: legacyModel = '',
     openRouterModel = ''
 } = input || {};
+
+// Resolve API Key based on provider
+let resolvedApiKey = '';
+if (aiProvider === 'openai' && openaiApiKey) resolvedApiKey = openaiApiKey;
+else if (aiProvider === 'google' && googleApiKey) resolvedApiKey = googleApiKey;
+else if (aiProvider === 'openrouter' && openRouterApiKey) resolvedApiKey = openRouterApiKey;
+else resolvedApiKey = apiKey; // Fallback
 
 // Determine the final model to use:
 // 1. If preset is 'CUSTOM', use the customModel field.
@@ -100,7 +112,7 @@ if (previousScreenshotBuffer && currentScreenshotBuffer) {
     }
 }
 
-if (output.changed && useAI && apiKey) {
+if (output.changed && useAI && resolvedApiKey) {
     log.info(`Generating AI summary using model: ${model || aiProvider + ' default'}...`);
     const prompt = `
 A webpage has changed.
@@ -118,13 +130,13 @@ Keep it concise and friendly.
 
     output.aiSummary = await runAI({
         provider: aiProvider,
-        apiKey,
+        apiKey: resolvedApiKey,
         model,
         prompt
     });
 } else if (output.changed) {
     if (!useAI) log.warning('AI summary skipped: "useAI" input is false.');
-    if (!apiKey) log.warning('AI summary skipped: "apiKey" input is missing.');
+    if (!resolvedApiKey) log.warning('AI summary skipped: "apiKey" input is missing.');
 }
 
 // Generate HTML Report

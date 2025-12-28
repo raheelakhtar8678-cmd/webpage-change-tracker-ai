@@ -5,180 +5,363 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Webpage Change Report</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --accent: #38bdf8;
+            /* Palette: Slate & Sky */
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+
+            --primary: #38bdf8;
+            --primary-dim: rgba(56, 189, 248, 0.1);
+
             --success: #4ade80;
-            --warning: #facc15;
+            --success-dim: rgba(74, 222, 128, 0.1);
+
             --danger: #f87171;
+            --danger-dim: rgba(248, 113, 113, 0.1);
+
+            --warning: #fbbf24;
+            --warning-dim: rgba(251, 191, 36, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
             margin: 0;
-            padding: 2rem;
+            padding: 0;
             line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .container {
-            max-width: 1200px;
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        a:hover {
+            color: #7dd3fc;
+            text-decoration: underline;
+        }
+
+        /* Layout */
+        .wrapper {
+            max-width: 1000px;
             margin: 0 auto;
+            padding: 2rem 1.5rem;
         }
 
         header {
-            text-align: center;
             margin-bottom: 3rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid #334155;
+            text-align: center;
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(to right, var(--accent), #818cf8);
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+            background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -0.025em;
         }
 
-        .meta {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
+        .meta-info {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
         }
 
-        .grid {
+        .url-pill {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0.25rem 1rem;
+            border-radius: 9999px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: border-color 0.2s;
+        }
+
+        /* Grid for reports */
+        .report-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 2rem;
         }
 
         @media (min-width: 768px) {
-            .grid {
-                grid-template-columns: 1fr 1fr;
+            .report-grid {
+                grid-template-columns: 1fr;
             }
         }
 
-        .card {
-            background: var(--card-bg);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            border: 1px solid #334155;
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0 0 1.25rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.75rem;
         }
 
-        .card h2 {
-            margin-top: 0;
-            color: var(--accent);
-            border-bottom: 1px solid #334155;
-            padding-bottom: 0.5rem;
+        h2 svg {
+            width: 24px;
+            height: 24px;
+            color: var(--primary);
+        }
+
+        /* AI Summary */
+        .ai-content {
+            font-size: 1.05rem;
+            color: #e2e8f0;
+        }
+
+        .ai-content p {
             margin-bottom: 1rem;
         }
 
-        .ai-summary-content {
-            background: rgba(56, 189, 248, 0.1);
-            border-left: 4px solid var(--accent);
-            padding: 1rem;
-            border-radius: 0.5rem;
+        .ai-content p:last-child {
+            margin-bottom: 0;
         }
 
-        .diff-container {
+        /* Visual Diff */
+        .diff-viewer {
             position: relative;
+            border-radius: 8px;
             overflow: hidden;
-            border-radius: 0.5rem;
-            border: 1px solid #334155;
+            border: 1px solid var(--border);
         }
 
-        .diff-image {
+        .diff-viewer img {
             width: 100%;
+            height: auto;
             display: block;
         }
 
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
             font-size: 0.875rem;
-            font-weight: 500;
+            color: var(--text-muted);
         }
 
-        .badge-change {
-            background: rgba(248, 113, 113, 0.2);
-            color: var(--danger);
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .badge-no-change {
-            background: rgba(74, 222, 128, 0.2);
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        /* Code/Text Diff */
+        .code-block {
+            background: #000000;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            border: 1px solid #333;
+        }
+
+        pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* Statuses */
+        .status-hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .status-icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .status-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .status-desc {
+            color: var(--text-muted);
+        }
+
+        /* Utilities */
+        .text-primary {
+            color: var(--primary);
+        }
+
+        .text-success {
             color: var(--success);
         }
 
-        .text-diff pre {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
+        .bg-success {
+            background-color: var(--success);
+        }
+
+        .text-danger {
+            color: var(--danger);
+        }
+
+        .bg-danger {
+            background-color: var(--danger);
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
+
+    <div class="wrapper">
         <header>
-            <h1>Webpage Change Report</h1>
-            <div class="meta">
-                <p>Checked URL: <a href="{{url}}" style="color: var(--accent);">{{url}}</a></p>
-                <p>Time: {{time}}</p>
+            <h1>Change Report</h1>
+            <div class="meta-info">
+                <span class="url-pill"><a href="{{url}}" target="_blank">{{url}}</a></span>
+                <span>Generated on {{time}}</span>
             </div>
         </header>
 
         {{#if changed}}
-        <div class="grid">
-            <div class="card" style="grid-column: 1 / -1;">
-                <h2>AI Analysis</h2>
-                <div class="ai-summary-content">
+        <main class="report-grid">
+
+            <!-- AI Analysis Section -->
+            <section class="card">
+                <h2>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    AI Analysis
+                </h2>
+                <div class="ai-content">
                     {{aiSummary}}
                 </div>
-            </div>
+            </section>
 
-            <div class="card">
-                <h2>Visual Diff</h2>
-                <div class="diff-container">
-                    <img src="{{diffImage}}" alt="Visual Difference" class="diff-image">
+            <!-- Visual Diff Section -->
+            <section class="card">
+                <h2>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    Visual Comparison
+                </h2>
+                <div class="diff-viewer">
+                    <img src="{{diffImage}}" alt="Visual Difference Heatmap">
                 </div>
-                <p style="text-align: center; margin-top: 1rem; color: var(--text-secondary);">
-                    Red pixels indicate changes.
-                </p>
-            </div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <span class="dot bg-danger"></span>
+                        <span>Changed Areas</span>
+                    </div>
+                </div>
+            </section>
 
-            <div class="card">
-                <h2>Text Changes</h2>
-                <div class="text-diff">
+            <!-- Data Changes -->
+            <section class="card">
+                <h2>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Detected Text Changes
+                </h2>
+                <div class="code-block">
                     <pre>{{textDiff}}</pre>
                 </div>
-            </div>
-        </div>
+            </section>
+
+        </main>
         {{else}}
+
         {{#if firstRun}}
-        <div class="card" style="text-align: center; padding: 3rem; border-color: var(--accent);">
-            <h2 style="border: none; color: var(--accent);">Baseline Captured</h2>
-            <p>This is the first run for this URL. A snapshot has been saved.</p>
-            <p style="color: var(--text-secondary); margin-top: 1rem;">Future runs will show changes compared to this
-                version.</p>
+        <div class="status-hero">
+            <svg class="status-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                style="color: var(--primary);">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div class="status-title" style="color: var(--primary);">Baseline Captured</div>
+            <div class="status-desc">
+                This is the first run. We've saved a snapshot of the page.<br>
+                Future runs will be compared against this version.
+            </div>
         </div>
         {{/if firstRun}}
 
-        <!-- Fallback for no changes (and not first run) - logic handled in JS -->
-        <div id="no-changes" class="card" style="text-align: center; padding: 3rem;">
-            <h2 style="border: none; color: var(--success);">No Changes Detected</h2>
-            <p>The webpage content matches the previous snapshot.</p>
+        <!-- No Changes (Logic handled in JS keeps this unless replaced) -->
+        <div id="no-changes-fallback" class="status-hero">
+            <svg class="status-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                style="color: var(--success);">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
+            </svg>
+            <div class="status-title" style="color: var(--success);">No Changes Detected</div>
+            <div class="status-desc">
+                The webpage content matches the previous snapshot exactly.
+            </div>
         </div>
+
         {{/if}}
+
+        <footer style="text-align: center; margin-top: 4rem; color: var(--border); font-size: 0.8rem;">
+            Powered by Webpage Change Tracker AI
+        </footer>
     </div>
+
 </body>
 
 </html>
