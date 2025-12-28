@@ -1,85 +1,74 @@
 # Webpage Change Tracker + AI Summary
 
-This Apify actor is a powerful tool for monitoring any webpage for changes. It goes beyond simple text comparison by offering a choice between clean text diffing and a more granular HTML diff. When changes are detected, it can provide a human-readable summary of what changed and why it might matter, powered by the latest AI models.
+Monitor any webpage for visual and text changes. Get premium, AI-powered reports delivered directly to your dashboard.
 
-## Key Features
+---
 
--   **Dual Diffing Modes**: Choose between a simple, readable **text diff** or a detailed, structural **HTML diff**.
--   **AI-Powered Summaries**: Get clear, concise explanations of any changes, powered by your choice of leading AI models.
--   **Bring Your Own AI Key**: Integrate seamlessly with OpenAI, Google Gemini, or any model on OpenRouter.
--   **Simple, Clean UX**: Just provide a URL, and the actor handles the rest.
+## 🚀 Quick Start Guide
 
-## A Note from the Developer
+### Step 1: Input Setup
+1.  **Webpage URL**: Enter the URL you want to track (e.g., `https://apnews.com/`).
+2.  **Toggle AI summary**: Turn this on to get a human-readable explanation of changes.
+3.  **Choose Provider & Key**:
+    -   Select **openai**, **google**, or **openrouter**.
+    -   **Important**: Put your API key in the *specific* field for that provider (e.g., if using OpenRouter, use the `OpenRouter API Key` field).
+4.  **Pick a Model**: Use a preset or choose **"CUSTOM"** to type in any ID (e.g., `qwen/qwen-2.5-72b-instruct`).
 
-I am a solo student developer, and I'm participating in the Apify competition with the goal of helping to pay for my tuition. Your support and feedback mean the world to me. Thank you for trying out my actor!
+### Step 2: Run the Actor
+-   Click the **Start** button.
+-   **Baseline Run**: The first time you run it for a URL, it saves a "snapshot".
+-   **Comparison Run**: Every run after that will compare the current page against that snapshot.
 
-## How to Use
+### Step 3: View Results
+-   **Dataset**: Click the **Dataset** tab to see the raw JSON data of changes.
+-   **Visual Report**: Click the **Key-value store** tab and open **`report.html`**. 
+    -   *Tip*: This is where you'll see the premium dashboard with visual heatmaps and AI analysis.
 
-### Input Configuration
+---
 
-The actor is designed to be very simple to use. Here are the available input options:
+## 🛠 Features
 
-| Field             | Description                                                                          |
-| ----------------- | ------------------------------------------------------------------------------------ |
-| **Webpage URL**   | The URL of the webpage you want to monitor.                                          |
-| **Enable AI summary** | A simple toggle to turn the AI summary feature on or off.                            |
-| **AI Provider**   | Choose between `openai`, `gemini`, or `openrouter`.                                    |
-| **OpenRouter Model** | If you select `openrouter`, you can specify any model available on their platform. |
-| **AI API Key**    | Your API key for the selected provider.                                              |
-| **Diff Type**     | Choose `text` for a clean diff or `html` for a structural one.                         |
+### 1. Premium Visual Dashboard
+The generated `report.html` is a state-of-the-art dashboard featuring:
+-   **Visual Heatmap**: High-fidelity diffs highlighting exactly where things moved or changed on the page.
+-   **AI Analysis**: A concise "Executive Summary" explaining *what* changed and *why* it matters.
+-   **Clean Diffs**: Beautifully formatted text changes with syntax highlighting.
 
-### Bring Your Own AI Key
+### 2. Smart AI Resolution
+-   **Automatic Formats**: If you use OpenRouter, just type the model name (e.g., `gemini-2.0-flash`). The actor automatically adds the necessary prefixes (`google/`) and suffixes (`:free`) for you.
+-   **Secure Inputs**: Your API keys are masked for security but remain easy to edit in the form.
 
-This actor supports several AI providers. To use the AI summary feature, you'll need to provide your own API key.
+### 3. Robust Comparison
+-   **Dynamic Height Handling**: Automatically handles pages that grow or shrink in length without crashing.
+-   **Pixel-Perfect Detection**: even minor CSS or layout shifts are caught.
 
--   **OpenAI**: Uses the `gpt-4o` model.
--   **Google Gemini**: Uses the `gemini-1.5-flash` model.
--   **OpenRouter**: Defaults to `qwen/qwen-3-coder-480b-a35b` (a powerful, free model), but you can specify any model available on their platform.
+---
 
-## Output Examples
+## 📂 Understanding Outputs
 
-The actor's output is designed to be clear and easy to understand. Here’s what you can expect:
+### Key-Value Store (`report.html`)
+This is the primary output for humans. It contains the beautiful dark-themed report you can open in any browser.
 
-### Text Diff Example
-
-When `diffType` is set to `text`, the `changedSections` array will show you the exact text that was added or removed.
-
+### Dataset (JSON)
+Perfect for developers or automation.
 ```json
 {
+  "url": "https://example.com",
   "changed": true,
-  "changedSections": [
-    {
-      "type": "addition",
-      "value": "New and Improved "
-    },
-    {
-      "type": "deletion",
-      "value": "Old "
-    }
-  ],
-  "summary": "The main headline was updated to highlight that the product is 'New and Improved', replacing the previous 'Old' version.",
-  "timestamp": "2025-12-24T12:00:00.000Z"
+  "status": "CHANGED",
+  "aiSummary": "The pricing section was updated from $10 to $12...",
+  "visualChangePercent": 12.5,
+  "changes": [...]
 }
 ```
 
-### HTML Diff Example
+---
 
-When `diffType` is set to `html`, you’ll see the raw HTML changes, including any new tags or attributes.
+## 💡 Pro Tips
+-   **Free AI**: Use the `openrouter` provider with a model ID like `google/gemini-2.0-flash-lite-preview-02-05:free` for high-quality summaries at zero cost.
+-   **Visual Only?**: If you don't need AI, just toggle it off to save credits. The visual and text diffs will still work perfectly.
 
-```json
-{
-  "changed": true,
-  "changedSections": [
-    {
-      "type": "addition",
-      "content": "<strong>Special Offer</strong>"
-    },
-    {
-      "type": "deletion",
-      "content": "<p>Old Offer</p>"
-    }
-  ],
-  "summary": "A new 'Special Offer' section was added to the page, replacing the previous offer.",
-  "timestamp": "2025-12-24T12:00:00.000Z"
-}
-```
+---
+
+*Developed with passion for the Apify competition. Thank you for your support!*
+
