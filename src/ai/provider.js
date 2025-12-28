@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { log } from 'apify';
 
 export async function runAI({ provider, apiKey, model, prompt }) {
     if (!apiKey) return null;
