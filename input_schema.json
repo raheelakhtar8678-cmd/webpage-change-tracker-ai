@@ -13,7 +13,10 @@
     "diffType": {
       "title": "Diff Type",
       "type": "string",
-      "enum": ["text", "html"],
+      "enum": [
+        "text",
+        "html"
+      ],
       "default": "text",
       "description": "Choose 'text' for a clean, readable diff or 'html' for a raw, structural comparison."
     },
@@ -26,21 +29,63 @@
     "aiProvider": {
       "title": "AI Provider (requires AI summary to be enabled)",
       "type": "string",
-      "enum": ["openai", "google", "openrouter"],
+      "enum": [
+        "openai",
+        "google",
+        "openrouter"
+      ],
       "default": "openai",
       "description": "Choose your preferred AI provider."
     },
-    "apiKey": {
-      "title": "AI API Key (requires AI summary to be enabled)",
-      "type": "string",
-      "editor": "hidden",
-      "description": "Your API key for the selected AI provider."
-    },
-    "model": {
-      "title": "AI Model (optional)",
+    "openaiApiKey": {
+      "title": "OpenAI API Key",
       "type": "string",
       "editor": "textfield",
-      "description": "Specify the model to use. Examples: For OpenAI, 'gpt-4o'; for Google, 'gemini-1.5-pro-latest'; for OpenRouter, 'google/gemini-pro'."
+      "isSecret": true,
+      "description": "API Key for OpenAI."
+    },
+    "googleApiKey": {
+      "title": "Google Gemini API Key",
+      "type": "string",
+      "editor": "textfield",
+      "isSecret": true,
+      "description": "API Key for Google Gemini."
+    },
+    "openRouterApiKey": {
+      "title": "OpenRouter API Key",
+      "type": "string",
+      "editor": "textfield",
+      "isSecret": true,
+      "description": "API Key for OpenRouter."
+    },
+    "apiKey": {
+      "title": "Fallback API Key (Legacy)",
+      "type": "string",
+      "editor": "textfield",
+      "isSecret": true,
+      "description": "Fallback key if specific provider key is not set."
+    },
+    "modelPreset": {
+      "title": "AI Model Preset",
+      "type": "string",
+      "editor": "select",
+      "default": "gemini-2.0-flash-lite-preview-02-05",
+      "enum": [
+        "gemini-2.0-flash-lite-preview-02-05",
+        "gemini-1.5-flash",
+        "gemini-1.5-pro",
+        "gpt-4o",
+        "gpt-4o-mini",
+        "CUSTOM"
+      ],
+      "description": "Select a popular model or choose 'CUSTOM' to enter your own below."
+    },
+    "customModel": {
+      "title": "Custom Model ID",
+      "type": "string",
+      "editor": "textfield",
+      "prefill": "gemini-2.0-flash-lite-preview-02-05",
+      "description": "Enter your specific model ID here if you selected 'CUSTOM' above (e.g. 'google/gemini-2.0-pro-exp-02-05')."
     },
     "summaryLength": {
       "title": "Summary Length (in words)",
@@ -49,5 +94,7 @@
       "description": "The maximum number of words for the AI-generated summary."
     }
   },
-  "required": ["url"]
+  "required": [
+    "url"
+  ]
 }

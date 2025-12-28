@@ -1,0 +1,55 @@
+{
+    "actorOutputSchemaVersion": 1,
+    "title": "Webpage Change Tracker Dataset",
+    "description": "Structure of the data saved when monitoring webpage changes.",
+    "properties": {
+        "report": {
+            "title": "Visual Analysis Report",
+            "type": "string",
+            "description": "Premium visual dashboard showing text and image diffs.",
+            "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/report.html"
+        },
+        "results": {
+            "title": "Dataset Results",
+            "type": "string",
+            "description": "Full dataset containing individual change records.",
+            "template": "{{links.apiDefaultDatasetUrl}}/items"
+        },
+        "url": {
+            "title": "Monitored URL",
+            "description": "The URL of the webpage that was checked.",
+            "type": "string"
+        },
+        "checkedAt": {
+            "title": "Checked At",
+            "description": "The timestamp when the check was performed.",
+            "type": "string",
+            "format": "date-time"
+        },
+        "changed": {
+            "title": "Changed",
+            "description": "Whether any change was detected (textual or visual).",
+            "type": "boolean"
+        },
+        "status": {
+            "title": "Status",
+            "description": "The result of the check (INITIAL_RUN, CHANGED, or NO_CHANGE).",
+            "type": "string"
+        },
+        "visualChangePercent": {
+            "title": "Visual Change %",
+            "description": "Percentage of pixels that changed visually.",
+            "type": "number"
+        },
+        "aiSummary": {
+            "title": "AI Summary",
+            "description": "AI-generated explanation of the changes detected.",
+            "type": "string"
+        },
+        "changes": {
+            "title": "Detailed Changes",
+            "description": "List of text/HTML additions and deletions.",
+            "type": "array"
+        }
+    }
+}
