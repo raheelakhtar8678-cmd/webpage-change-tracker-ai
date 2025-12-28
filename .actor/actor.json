@@ -3,7 +3,7 @@
     "name": "webpage-change-tracker-ai",
     "title": "Webpage Change Tracker + AI Summary",
     "version": "1.0.0",
-    "dockerfile": "./Dockerfile",
+    "dockerfile": "../Dockerfile",
     "input": "./input_schema.json",
     "output": "./output_schema.json"
 }
