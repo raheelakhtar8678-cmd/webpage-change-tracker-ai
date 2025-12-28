@@ -40,25 +40,29 @@
     "openaiApiKey": {
       "title": "OpenAI API Key",
       "type": "string",
-      "editor": "hidden",
+      "editor": "textfield",
+      "isSecret": true,
       "description": "API Key for OpenAI."
     },
     "googleApiKey": {
       "title": "Google Gemini API Key",
       "type": "string",
-      "editor": "hidden",
+      "editor": "textfield",
+      "isSecret": true,
       "description": "API Key for Google Gemini."
     },
     "openRouterApiKey": {
       "title": "OpenRouter API Key",
       "type": "string",
-      "editor": "hidden",
+      "editor": "textfield",
+      "isSecret": true,
       "description": "API Key for OpenRouter."
     },
     "apiKey": {
       "title": "Fallback API Key (Legacy)",
       "type": "string",
-      "editor": "hidden",
+      "editor": "textfield",
+      "isSecret": true,
       "description": "Fallback key if specific provider key is not set."
     },
     "modelPreset": {
