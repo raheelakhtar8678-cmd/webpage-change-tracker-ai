@@ -10,6 +10,12 @@ import { compareImages } from './utils/image-diff.js';
 await Actor.init();
 
 const input = await Actor.getInput();
+const maskedInput = { ...input };
+for (const key in maskedInput) {
+    if (key.toLowerCase().includes('key')) maskedInput[key] = '***';
+}
+log.info('Received Input:', JSON.stringify(maskedInput, null, 2));
+
 const {
     url,
     useAI = false,
@@ -50,10 +56,12 @@ if (useAI) {
     log.info(`API Resolution: Provider=${aiProvider}, KeySource=${keySource}${resolvedApiKey ? ' (Set)' : ' (Missing)'}`);
 }
 
-// Determine the final model to use:
+// Determine the final model to use (Priority: Custom > Legacy 'model' > Preset)
 let model = '';
 if (modelPreset === 'CUSTOM' && customModel) {
     model = customModel;
+} else if (legacyModel || openRouterModel) {
+    model = legacyModel || openRouterModel;
 } else if (modelPreset && modelPreset !== 'CUSTOM') {
     // Only use preset if it actually belongs to the current provider (rough check)
     const isGeminiPreset = modelPreset.startsWith('gemini');
@@ -61,13 +69,13 @@ if (modelPreset === 'CUSTOM' && customModel) {
 
     if (aiProvider === 'openai' && isGPTPreset) model = modelPreset;
     else if (aiProvider === 'google' && isGeminiPreset) model = modelPreset;
-    else if (aiProvider === 'openrouter') model = modelPreset; // OpenRouter accepts most
+    else if (aiProvider === 'openrouter') model = modelPreset;
     else {
-        log.warning(`Model preset "${modelPreset}" might not be compatible with provider "${aiProvider}". Using provider default instead.`);
+        log.warning(`Model preset "${modelPreset}" might not be compatible with provider "${aiProvider}". Using default instead.`);
         model = ''; // Let provider handle default
     }
 } else {
-    model = legacyModel || openRouterModel || '';
+    model = '';
 }
 
 if (!url) {

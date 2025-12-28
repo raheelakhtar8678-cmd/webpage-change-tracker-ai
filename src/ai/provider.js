@@ -43,14 +43,22 @@ export async function runAI({ provider, apiKey, model, prompt }) {
         }
 
         if (provider === 'openrouter') {
-            let finalModel = model || 'google/gemini-2.0-flash-lite-preview-02-05:free';
+            let finalModel = (model || 'google/gemini-2.0-flash-lite-preview-02-05:free').trim();
 
             // If model looks like a bare ID (no /), try to prefix it for common models
             if (!finalModel.includes('/')) {
-                if (finalModel.startsWith('gemini')) finalModel = `google/${finalModel}`;
-                else if (finalModel.startsWith('gpt')) finalModel = `openai/${finalModel}`;
-                else if (finalModel.startsWith('claude')) finalModel = `anthropic/${finalModel}`;
+                if (finalModel.includes('gemini')) finalModel = `google/${finalModel}`;
+                else if (finalModel.includes('gpt')) finalModel = `openai/${finalModel}`;
+                else if (finalModel.includes('claude')) finalModel = `anthropic/${finalModel}`;
             }
+
+            // OpenRouter often needs :free or specific IDs.
+            // If it's specifically our gemini-2.0 preset ID, ensure it has the :free suffix if bare.
+            if (finalModel.includes('google/gemini-2.0-flash-lite-preview-02-05') && !finalModel.includes(':')) {
+                finalModel = 'google/gemini-2.0-flash-lite-preview-02-05:free';
+            }
+
+            log.info(`Final OpenRouter model string: "${finalModel}"`);
 
             const res = await axios.post(
                 'https://openrouter.ai/api/v1/chat/completions',
