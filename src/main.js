@@ -209,10 +209,10 @@ const populatedReport = reportTemplate
 
 // Handle boolean visibility via CSS or simple string cut? 
 // Let's just create two versions of the internal body or use a proper replace.
-// Simpler: Just save the report.
-await store.setValue('report.html', populatedReport, { contentType: 'text/html' });
+// Simpler: Just save the report to the DEFAULT store so the output schema can find it
+await Actor.setValue('report.html', populatedReport, { contentType: 'text/html' });
 
-
+// Keep snapshots in the named store
 await store.setValue('snapshot_text', currentText);
 await store.setValue('snapshot_image', currentScreenshotBuffer, { contentType: 'image/png' });
 
