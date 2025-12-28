@@ -30,23 +30,44 @@ const {
 
 // Resolve API Key based on provider
 let resolvedApiKey = '';
-if (aiProvider === 'openai' && openaiApiKey) resolvedApiKey = openaiApiKey;
-else if (aiProvider === 'google' && googleApiKey) resolvedApiKey = googleApiKey;
-else if (aiProvider === 'openrouter' && openRouterApiKey) resolvedApiKey = openRouterApiKey;
-else resolvedApiKey = apiKey; // Fallback
+let keySource = 'none';
+
+if (aiProvider === 'openai' && openaiApiKey) {
+    resolvedApiKey = openaiApiKey;
+    keySource = 'openaiApiKey';
+} else if (aiProvider === 'google' && googleApiKey) {
+    resolvedApiKey = googleApiKey;
+    keySource = 'googleApiKey';
+} else if (aiProvider === 'openrouter' && openRouterApiKey) {
+    resolvedApiKey = openRouterApiKey;
+    keySource = 'openRouterApiKey';
+} else if (apiKey) {
+    resolvedApiKey = apiKey;
+    keySource = 'apiKey (fallback)';
+}
+
+if (useAI) {
+    log.info(`API Resolution: Provider=${aiProvider}, KeySource=${keySource}${resolvedApiKey ? ' (Set)' : ' (Missing)'}`);
+}
 
 // Determine the final model to use:
-// 1. If preset is 'CUSTOM', use the customModel field.
-// 2. If preset is NOT 'CUSTOM', use the preset value.
-// 3. Fallback to legacy inputs if new ones aren't helpful (e.g. running via API with old payload).
 let model = '';
 if (modelPreset === 'CUSTOM' && customModel) {
     model = customModel;
 } else if (modelPreset && modelPreset !== 'CUSTOM') {
-    model = modelPreset;
+    // Only use preset if it actually belongs to the current provider (rough check)
+    const isGeminiPreset = modelPreset.startsWith('gemini');
+    const isGPTPreset = modelPreset.startsWith('gpt');
+
+    if (aiProvider === 'openai' && isGPTPreset) model = modelPreset;
+    else if (aiProvider === 'google' && isGeminiPreset) model = modelPreset;
+    else if (aiProvider === 'openrouter') model = modelPreset; // OpenRouter accepts most
+    else {
+        log.warning(`Model preset "${modelPreset}" might not be compatible with provider "${aiProvider}". Using provider default instead.`);
+        model = ''; // Let provider handle default
+    }
 } else {
-    // Fallback logic
-    model = legacyModel || openRouterModel || customModel || 'gemini-2.0-flash-lite-preview-02-05';
+    model = legacyModel || openRouterModel || '';
 }
 
 if (!url) {

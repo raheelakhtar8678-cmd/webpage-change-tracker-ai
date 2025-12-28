@@ -8,7 +8,7 @@ export async function runAI({ provider, apiKey, model, prompt }) {
             const res = await axios.post(
                 'https://api.openai.com/v1/chat/completions',
                 {
-                    model: model || 'gpt-4o', // Use user-provided model or default
+                    model: model || 'gpt-4o-mini',
                     messages: [{ role: 'user', content: prompt }],
                     temperature: 0.3
                 },
@@ -23,11 +23,9 @@ export async function runAI({ provider, apiKey, model, prompt }) {
         }
 
         if (provider === 'gemini' || provider === 'google') {
-            // Google uses the model in the URL path: models/gemini-2.0-flash-lite-preview-02-05:generateContent
-            let modelName = model || 'gemini-2.0-flash-lite-preview-02-05';
-            modelName = modelName.trim().replace(/\s+/g, '-'); // Fix "gemini 2.5 flash lite" -> "gemini-2.5-flash-lite"
-            // Simple mapping if user provides short names, else assume correct format or fix typical variants
-            const cleanModel = modelName.includes('/') ? modelName.split('/')[1] : modelName;
+            const modelId = model || 'gemini-2.0-flash-lite-preview-02-05';
+            // Simple mapping if user provides short names, else assume correct format
+            const cleanModel = modelId.includes('/') ? modelId.split('/')[1] : modelId;
 
             const res = await axios.post(
                 `https://generativelanguage.googleapis.com/v1beta/models/${cleanModel}:generateContent`,
@@ -45,10 +43,19 @@ export async function runAI({ provider, apiKey, model, prompt }) {
         }
 
         if (provider === 'openrouter') {
+            let finalModel = model || 'google/gemini-2.0-flash-lite-preview-02-05:free';
+
+            // If model looks like a bare ID (no /), try to prefix it for common models
+            if (!finalModel.includes('/')) {
+                if (finalModel.startsWith('gemini')) finalModel = `google/${finalModel}`;
+                else if (finalModel.startsWith('gpt')) finalModel = `openai/${finalModel}`;
+                else if (finalModel.startsWith('claude')) finalModel = `anthropic/${finalModel}`;
+            }
+
             const res = await axios.post(
                 'https://openrouter.ai/api/v1/chat/completions',
                 {
-                    model: model || 'openai/gpt-4o',
+                    model: finalModel,
                     messages: [{ role: 'user', content: prompt }]
                 },
                 {
