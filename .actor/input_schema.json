@@ -8,6 +8,7 @@
       "title": "Webpage URL",
       "type": "string",
       "editor": "textfield",
+      "prefill": "https://apify.com",
       "description": "The URL of the webpage you want to monitor."
     },
     "diffType": {
@@ -34,7 +35,7 @@
         "google",
         "openrouter"
       ],
-      "default": "openai",
+      "default": "google",
       "description": "Choose your preferred AI provider."
     },
     "openaiApiKey": {

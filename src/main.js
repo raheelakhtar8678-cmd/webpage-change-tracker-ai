@@ -24,8 +24,6 @@ const {
     openaiApiKey = '',
     googleApiKey = '',
     openRouterApiKey = '',
-    // Legacy fallback
-    apiKey = '',
     // New fields from schema update
     modelPreset = 'gemini-2.0-flash-lite-preview-02-05',
     customModel = '',
@@ -47,9 +45,6 @@ if (aiProvider === 'openai' && openaiApiKey) {
 } else if (aiProvider === 'openrouter' && openRouterApiKey) {
     resolvedApiKey = openRouterApiKey;
     keySource = 'openRouterApiKey';
-} else if (apiKey) {
-    resolvedApiKey = apiKey;
-    keySource = 'apiKey (fallback)';
 }
 
 if (useAI) {
